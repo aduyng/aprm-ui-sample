@@ -1,0 +1,346 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "APIs to access Integrated Schedule Management repositories\n\nServices API is protected with dynamic token (using 'Authorization' header). In order to access API through Swagger - one needs to authorize calls with 'Authorize' button and provide appropriate token value prefixed with Bearer and single space (e.g. 'Bearer {TOKEN}').",
+    "version": "1.0",
+    "title": "ISM API",
+    "termsOfService": "TBD",
+    "license": { "name": "TBD" }
+  },
+  "host": "localhost:8100",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "security-service-controller",
+      "description": "Security Service Controller"
+    }
+  ],
+  "paths": {
+    "/api/security/roles": {
+      "get": {
+        "tags": ["security-service-controller"],
+        "summary": "Gets role definition",
+        "operationId": "getRolesUsingGET",
+        "produces": ["*/*"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/GetRolesResponse" }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          }
+        },
+        "security": [{ "Token": ["all"] }],
+        "deprecated": false
+      },
+      "post": {
+        "tags": ["security-service-controller"],
+        "summary": "Defines role",
+        "operationId": "defineRoleUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "createRoleRequest",
+            "description": "createRoleRequest",
+            "required": true,
+            "schema": { "$ref": "#/definitions/CreateRoleRequest" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": { "$ref": "#/definitions/Generic api response" }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          }
+        },
+        "security": [{ "Token": ["all"] }],
+        "deprecated": false
+      }
+    },
+    "/api/security/roles/{roleName}": {
+      "get": {
+        "tags": ["security-service-controller"],
+        "summary": "Gets role definition",
+        "operationId": "getRoleUsingGET",
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "roleName",
+            "in": "path",
+            "description": "roleName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Role" }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          }
+        },
+        "security": [{ "Token": ["all"] }],
+        "deprecated": false
+      },
+      "post": {
+        "tags": ["security-service-controller"],
+        "summary": "update existing role",
+        "operationId": "updateRoleUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "name": "roleName",
+            "in": "path",
+            "description": "roleName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateRoleRequest",
+            "description": "updateRoleRequest",
+            "required": true,
+            "schema": { "$ref": "#/definitions/UpdateRoleRequest" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Generic api response" }
+          },
+          "201": { "description": "Created successfully" },
+          "400": {
+            "description": "Bad request",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          }
+        },
+        "security": [{ "Token": ["all"] }],
+        "deprecated": false
+      }
+    },
+    "/api/security/token": {
+      "post": {
+        "tags": ["security-service-controller"],
+        "summary": "Creates authorization token",
+        "operationId": "createTokenUsingPOST",
+        "consumes": ["application/json"],
+        "produces": ["*/*"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "tokenCreateRequest",
+            "description": "tokenCreateRequest",
+            "required": true,
+            "schema": { "$ref": "#/definitions/TokenCreateRequest" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": { "$ref": "#/definitions/TokenCreateResponse" }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": { "$ref": "#/definitions/ErrorResponse" }
+          }
+        },
+        "security": [{ "Token": ["all"] }],
+        "deprecated": false
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Token": { "type": "apiKey", "name": "Authorization", "in": "header" }
+  },
+  "definitions": {
+    "Action": {
+      "type": "object",
+      "properties": { "actionString": { "type": "string" } },
+      "title": "Action"
+    },
+    "CreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "role": { "type": "string" },
+        "permissions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Permission" }
+        }
+      },
+      "title": "CreateRoleRequest"
+    },
+    "Credentials": {
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "password": { "type": "string" }
+      },
+      "title": "Credentials"
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "string",
+          "example": "Field 'description' is missing",
+          "description": "Additional error details"
+        },
+        "errorCode": {
+          "type": "string",
+          "example": "GE0001",
+          "description": "Error code that can be decrypted wir error catalog"
+        },
+        "status": {
+          "type": "string",
+          "example": "Bad request",
+          "description": "General status"
+        }
+      },
+      "title": "ErrorResponse",
+      "description": "Error response"
+    },
+    "Filter": {
+      "type": "object",
+      "required": ["id", "parameters"],
+      "properties": {
+        "id": { "type": "string" },
+        "parameters": { "type": "array", "items": { "type": "string" } }
+      },
+      "title": "Filter"
+    },
+    "Generic api response": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Additional information"
+        },
+        "result": {
+          "type": "string",
+          "description": "Result: success or error"
+        }
+      },
+      "title": "Generic api response"
+    },
+    "GetRolesResponse": {
+      "type": "object",
+      "properties": { "roles": { "$ref": "#/definitions/StreamOfRole" } },
+      "title": "GetRolesResponse"
+    },
+    "Permission": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Action" }
+        },
+        "resources": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Resource" }
+        }
+      },
+      "title": "Permission"
+    },
+    "Resource": {
+      "type": "object",
+      "required": ["filters"],
+      "properties": {
+        "resourceId": { "type": "string" },
+        "filters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Filter" }
+        }
+      },
+      "title": "Resource"
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "permissions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Permission" }
+        }
+      },
+      "title": "Role"
+    },
+    "StreamOfRole": {
+      "type": "object",
+      "properties": { "parallel": { "type": "boolean" } },
+      "title": "StreamOfRole"
+    },
+    "TokenCreateRequest": {
+      "type": "object",
+      "properties": {
+        "credentials": {
+          "description": "Credentials for authentication, required if no auth token present in cookies",
+          "$ref": "#/definitions/Credentials"
+        },
+        "providerType": {
+          "type": "string",
+          "description": "Provider for this authentication request",
+          "enum": ["Local", "SCP"]
+        }
+      },
+      "title": "TokenCreateRequest"
+    },
+    "TokenCreateResponse": {
+      "type": "object",
+      "required": ["tokenExpiryTime"],
+      "properties": {
+        "token": { "type": "string" },
+        "tokenExpiryTime": { "type": "string", "format": "date-time" }
+      },
+      "title": "TokenCreateResponse"
+    },
+    "UpdateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Permission" }
+        }
+      },
+      "title": "UpdateRoleRequest"
+    }
+  }
+}

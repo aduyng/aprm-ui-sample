@@ -1,0 +1,4 @@
+[
+  "reference-data.airports:update-airport",
+  "reference-data.timezones:update-timezone"
+]

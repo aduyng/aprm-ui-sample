@@ -1,0 +1,11 @@
+[
+  {
+    "name": "admin",
+    "permissions": [
+      {
+        "actions": ["create", "retrieve", "update", "delete"],
+        "resources": [{ "resourceId": "roles" }]
+      }
+    ]
+  }
+]
